@@ -1,25 +1,21 @@
 package com.example.spring5recipeapp.controller;
 
-import com.example.spring5recipeapp.repository.CategoryRepository;
-import com.example.spring5recipeapp.repository.UnitOfMeasureRepository;
+import com.example.spring5recipeapp.service.RecipeService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class IndexController {
+    private final RecipeService recipeService;
 
-    private final CategoryRepository categoryRepository;
-    private final UnitOfMeasureRepository unitOfMeasureRepository;
-
-    public IndexController(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
-        this.categoryRepository = categoryRepository;
-        this.unitOfMeasureRepository = unitOfMeasureRepository;
+    public IndexController(RecipeService recipeService) {
+        this.recipeService = recipeService;
     }
 
     @RequestMapping({"", "/","/index"})
-    public String getIndexPage(){
-        System.out.println("Category Id is: " + categoryRepository.findByDescription("American").get().getId());
-        System.out.println("UnitOfMeasure Id is: " + unitOfMeasureRepository.findByDescription("Teaspoon").get().getId());
+    public String getIndexPage(Model model){
+        model.addAttribute("recipes", recipeService.findAll());
         return "index";
     }
 }

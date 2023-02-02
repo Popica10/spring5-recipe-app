@@ -2,6 +2,7 @@ package com.example.spring5recipeapp.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -16,6 +17,7 @@ public class Recipe {
     private Integer servings;
     private String source;
     private String url;
+    @Lob
     private String directions;
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
@@ -24,9 +26,9 @@ public class Recipe {
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    Set<Ingredient> ingredients;
+    Set<Ingredient> ingredients = new HashSet<>();
     @ManyToMany(mappedBy = "recipes")
-    Set<Category> categories;
+    Set<Category> categories = new HashSet<>();
 
     public Long getId() {
         return id;
