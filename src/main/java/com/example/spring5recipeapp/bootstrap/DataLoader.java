@@ -4,6 +4,8 @@ import com.example.spring5recipeapp.model.*;
 import com.example.spring5recipeapp.repository.CategoryRepository;
 import com.example.spring5recipeapp.repository.RecipeRepository;
 import com.example.spring5recipeapp.repository.UnitOfMeasureRepository;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final CategoryRepository categoryRepository;
@@ -28,8 +31,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
         recipeRepository.saveAll(getRecipes());
+        log.debug("Loading Bootstrap data");
     }
 
     private List<Recipe> getRecipes() {
